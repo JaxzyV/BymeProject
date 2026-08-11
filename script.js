@@ -223,7 +223,7 @@ document.addEventListener("DOMContentLoaded", function () {
       newItem.className = "flex items-center gap-2 seserahan-item";
       newItem.innerHTML = `
               <input type="text" placeholder="Item ${nextIndex}"
-                  class="item-input flex-1 bg-white/90 border border-amber-900/15 rounded-xl py-2 px-3 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-blue-500 transition">
+                  class="item-input flex-1 bg-blue-50 border border-slate-700/60 rounded-xl py-2 px-3 text-sm text-black placeholder-slate-500 focus:outline-none focus:bg-blue-50 transition">
               <button type="button" class="btn-remove-item text-rose-500 p-2 transition" aria-label="Hapus item">
                   <i class="fa-solid fa-trash-can"></i>
               </button>
