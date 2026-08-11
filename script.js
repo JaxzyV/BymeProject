@@ -224,7 +224,7 @@ document.addEventListener("DOMContentLoaded", function () {
       newItem.innerHTML = `
               <input type="text" placeholder="Item ${nextIndex}"
                   class="item-input flex-1 bg-blue-50 border border-slate-700/60 rounded-xl py-2 px-3 text-sm text-black placeholder-slate-500 focus:outline-none focus:bg-blue-50 transition">
-              <button type="button" class="btn-remove-item text-rose-500 p-2 transition" aria-label="Hapus item">
+              <button type="button" class="btn-remove-item text-rose-500 p-2 transition opacity-40 cursor-not-allowed" disabled aria-label="Hapus item">
                   <i class="fa-solid fa-trash-can"></i>
               </button>
           `;
