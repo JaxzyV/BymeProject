@@ -1,6 +1,6 @@
 /**
  * BymeProject - Form Pemesanan Mahar & Seserahan
- * Client-side Controller dengan Custom Toast & Animated Checkmark Modal
+ * Client-side Controller dengan Custom Toast, Animated Checkmark, & Social Media CSV
  */
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // 1. OBFUSCATED APPS SCRIPT URL
   // -----------------------------------------------------------
   const _0x4a21 = [
-    "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J4Yi05TVpVVkxPY3Z5elJISllWQmppWS0tVnlJT2hWNFZGQ3RzX05iZmFXWFBaZE04d3lwSmUzVTNybjBONGxNeE9vdy9leGVj",
+    "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J6emF3S0J4Ym5uU3RvTjMwNzlMQ0NucnFQMlhUWElWWEREMWVDdmdCZkFNQlNUWUVkLUw1eXRHdlFpZVo3czVodlZMQS9leGVj",
   ];
 
   function getEndpoint() {
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }, 800);
 
   // -----------------------------------------------------------
-  // 3. HELPER: CUSTOM TOAST NOTIFICATION (Pengganti alert)
+  // 3. HELPER: CUSTOM TOAST NOTIFICATION
   // -----------------------------------------------------------
   function showToast(message) {
     let toast = document.getElementById("customToast");
@@ -78,7 +78,21 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // -----------------------------------------------------------
-  // 4. MULTI-STEP NAVIGATION LOGIC
+  // 4. HELPER: SOSIAL MEDIA CSV FORMATTER (Platform + Akun)
+  // -----------------------------------------------------------
+  function getSosmedCSV() {
+    const platformElem = document.getElementById("sosmedPlatform");
+    const accountElem = document.getElementById("sosmedAccount");
+
+    const platform = platformElem ? platformElem.value.trim() : "Instagram";
+    const account = accountElem ? accountElem.value.trim() : "";
+
+    if (!account) return "";
+    return `${platform},${account}`; // Menghasilkan format: "Platform,Akun"
+  }
+
+  // -----------------------------------------------------------
+  // 5. MULTI-STEP NAVIGATION LOGIC
   // -----------------------------------------------------------
   function updateStepUI() {
     for (let i = 1; i <= totalSteps; i++) {
@@ -122,15 +136,15 @@ document.addEventListener("DOMContentLoaded", function () {
   function validateCurrentStep() {
     if (currentStep === 2) {
       const nama = document.getElementById("namaLengkap").value.trim();
-      const ig = document.getElementById("usernameIg").value.trim();
+      const sosmedCSV = getSosmedCSV();
       const tgl = document.getElementById("tanggalAcara").value.trim();
 
-      if (!nama || !ig || !tgl) {
-        showToast("Mohon lengkapi Nama, Username Instagram, dan Tanggal Acara.");
+      if (!nama || !sosmedCSV || !tgl) {
+        showToast("Mohon lengkapi Nama, Akun Media Sosial, dan Tanggal Acara.");
         return false;
       }
     } else if (currentStep === 3) {
-      const alamat = alamatInput.value.trim();
+      const alamat = alamatInput ? alamatInput.value.trim() : "";
       if (!alamat) {
         showToast("Mohon isi alamat lengkap Anda.");
         return false;
@@ -162,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // -----------------------------------------------------------
-  // 5. GEOLOCATION & REVERSE GEOCODING (Sharelock)
+  // 6. GEOLOCATION & REVERSE GEOCODING (Sharelock)
   // -----------------------------------------------------------
   if (btnSharelock) {
     btnSharelock.addEventListener("click", function () {
@@ -212,7 +226,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // -----------------------------------------------------------
-  // 6. DYNAMIC SESERAHAN LIST
+  // 7. DYNAMIC SESERAHAN LIST
   // -----------------------------------------------------------
   if (btnAddItem && seserahanContainer) {
     btnAddItem.addEventListener("click", function () {
@@ -223,8 +237,8 @@ document.addEventListener("DOMContentLoaded", function () {
       newItem.className = "flex items-center gap-2 seserahan-item";
       newItem.innerHTML = `
               <input type="text" placeholder="Item ${nextIndex}"
-                  class="item-input flex-1 bg-blue-50 border border-slate-700/60 rounded-xl py-2 px-3 text-sm text-black placeholder-slate-500 focus:outline-none focus:bg-blue-50 transition">
-              <button type="button" class="btn-remove-item text-rose-500 p-2 transition opacity-40 cursor-not-allowed" disabled aria-label="Hapus item">
+                  class="item-input flex-1 bg-white/90 border border-amber-900/15 rounded-xl py-2 px-3 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-blue-500 transition">
+              <button type="button" class="btn-remove-item text-stone-400 hover:text-rose-500 p-2 transition" aria-label="Hapus item">
                   <i class="fa-solid fa-trash-can"></i>
               </button>
           `;
@@ -272,7 +286,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // -----------------------------------------------------------
-  // 7. FORM SUBMISSION & SUCCESS ANIMATION MODAL
+  // 8. FORM SUBMISSION TO GOOGLE APPS SCRIPT
   // -----------------------------------------------------------
   async function submitForm() {
     const seserahanCSV = getSeserahanCSV();
@@ -281,11 +295,14 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    const sosmedValue = getSosmedCSV();
+
     const payload = {
       namaLengkap: document.getElementById("namaLengkap").value.trim(),
-      usernameIg: document.getElementById("usernameIg").value.trim(),
+      sosmedCSV: sosmedValue, // Pengiriman format "Platform,Akun"
+      usernameIg: sosmedValue, // Fallback untuk backend skrip lama
       tanggalAcara: document.getElementById("tanggalAcara").value.trim(),
-      alamat: alamatInput.value.trim(),
+      alamat: alamatInput ? alamatInput.value.trim() : "",
       mapsUrl: mapsUrlInput ? mapsUrlInput.value.trim() : "",
       seserahanList: seserahanCSV,
     };
