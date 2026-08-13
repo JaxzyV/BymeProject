@@ -288,6 +288,33 @@ document.addEventListener("DOMContentLoaded", function () {
   // -----------------------------------------------------------
   // 8. FORM SUBMISSION TO GOOGLE APPS SCRIPT
   // -----------------------------------------------------------
+// CONFIGURATION: Nomor WhatsApp Admin (Gunakan format 62...)
+  const ADMIN_WA_NUMBER = "6281234567890"; // <-- GANTI DENGAN NOMOR WA ANDA
+
+  // Helper: Membuat URL WhatsApp dengan Templat Pesan
+  function buildWhatsAppUrl(payload) {
+    // Merapikan format daftar seserahan (CSV ke list berpoin)
+    const itemsList = payload.seserahanList
+      .split(",")
+      .map((item, idx) => `   ${idx + 1}. ${item.trim()}`)
+      .join("\n");
+
+    // Templat Pesan WhatsApp
+    const message = `Halo BymeProject, saya ingin mengonfirmasi pesanan baru:
+
+  *DATA PEMESAN:*
+  • *Nama Lengkap:* ${payload.namaLengkap}
+  • *Media Sosial:* ${payload.sosmedCSV}
+  • *Tanggal Acara:* ${payload.tanggalAcara}
+  Mohon diproses pesanan saya. Terima kasih!`;
+
+    // Encode teks agar aman untuk URL
+    return `https://wa.me/${ADMIN_WA_NUMBER}?text=${encodeURIComponent(message)}`;
+  }
+
+  // -----------------------------------------------------------
+  // SUBMIT FORM & REDIRECT WA
+  // -----------------------------------------------------------
   async function submitForm() {
     const seserahanCSV = getSeserahanCSV();
     if (!seserahanCSV) {
@@ -299,8 +326,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const payload = {
       namaLengkap: document.getElementById("namaLengkap").value.trim(),
-      sosmedCSV: sosmedValue, // Pengiriman format "Platform,Akun"
-      usernameIg: sosmedValue, // Fallback untuk backend skrip lama
+      sosmedCSV: sosmedValue,
+      usernameIg: sosmedValue,
       tanggalAcara: document.getElementById("tanggalAcara").value.trim(),
       alamat: alamatInput ? alamatInput.value.trim() : "",
       mapsUrl: mapsUrlInput ? mapsUrlInput.value.trim() : "",
@@ -324,7 +351,12 @@ document.addEventListener("DOMContentLoaded", function () {
         await new Promise((res) => setTimeout(res, 1200));
       }
 
-      showSuccessModal();
+      // Buat URL WA berdasarkan payload
+      const waUrl = buildWhatsAppUrl(payload);
+
+      // Tampilkan Modal Sukses terlebih dahulu
+      showSuccessModal(waUrl);
+
     } catch (err) {
       console.error("Submission error:", err);
       showToast("Terjadi kesalahan pengiriman. Coba lagi.");
@@ -334,7 +366,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  function showSuccessModal() {
+  function showSuccessModal(waUrl) {
     if (!successModal || !modalCard) return;
 
     // Trigger Ulang Animasi SVG Circle & Checkmark
@@ -344,16 +376,34 @@ document.addEventListener("DOMContentLoaded", function () {
     if (svgCircle && svgCheck) {
       svgCircle.style.animation = "none";
       svgCheck.style.animation = "none";
-      // Reflow DOM untuk mereset animasi CSS
-      void svgCircle.offsetWidth;
+      void svgCircle.offsetWidth; // Reflow
       svgCircle.style.animation = "";
       svgCheck.style.animation = "";
     }
 
+    // Setel Aksi Tombol di Modal untuk Mengarah ke WA
+    const btnModal = modalCard.querySelector("button");
+    if (btnModal && waUrl) {
+      btnModal.innerHTML = `<i class="fa-brands fa-whatsapp text-base mr-1"></i> Konfirmasi ke WhatsApp`;
+      btnModal.className = "w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-xs font-semibold shadow-md shadow-emerald-500/20 transition active:scale-95 flex items-center justify-center gap-1";
+      btnModal.onclick = function () {
+        window.open(waUrl, "_blank");
+        location.reload(); // Reset form setelah membuka WA
+      };
+    }
+
+    // Tampilkan Modal
     successModal.classList.remove("hidden");
     setTimeout(() => {
       modalCard.classList.remove("scale-95", "opacity-0");
       modalCard.classList.add("scale-100", "opacity-100");
     }, 50);
+
+    // Opsi Otomatis Buka WA setelah 2 detik (Opsional)
+    setTimeout(() => {
+      if (waUrl) {
+        window.open(waUrl, "_blank");
+      }
+    }, 2000);
   }
 });
