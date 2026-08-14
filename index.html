@@ -71,49 +71,74 @@
             box-shadow: 0 8px 32px 0 rgba(112, 85, 62, 0.08);
         }
 
-/* Animasi Lingkaran */
-    .checkmark-circle {
-        stroke-dasharray: 166;
-        stroke-dashoffset: 166;
-        stroke-width: 3;
-        stroke-miterlimit: 10;
-        stroke: #16a34a; /* Warna Hijau Sukses */
-        fill: none;
-        animation: strokeCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
-    }
-
-    /* Animasi Centang / Checklist */
-    .checkmark-check {
-        transform-origin: 50% 50%;
-        stroke-dasharray: 48;
-        stroke-dashoffset: 48;
-        stroke-width: 3.5;
-        stroke: #16a34a; /* Warna Hijau Sukses */
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        fill: none;
-        /* Delay 0.5s agar garis centang muncul SETELAH lingkaran selesai digambar */
-        animation: strokeCheck 0.4s cubic-bezier(0.65, 0, 0.45, 1) 0.5s forwards;
-    }
-
-    @keyframes strokeCircle {
-        100% {
-            stroke-dashoffset: 0;
+        /* Animasi Lingkaran */
+        .checkmark-circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 3;
+            stroke-miterlimit: 10;
+            stroke: #16a34a; /* Warna Hijau Sukses */
+            fill: none;
+            animation: strokeCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
         }
-    }
 
-    @keyframes strokeCheck {
-        100% {
-            stroke-dashoffset: 0;
+        /* Animasi Centang / Checklist */
+        .checkmark-check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            stroke-width: 3.5;
+            stroke: #16a34a; /* Warna Hijau Sukses */
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+            animation: strokeCheck 0.4s cubic-bezier(0.65, 0, 0.45, 1) 0.5s forwards;
         }
-    }
+
+        /* Custom Scrollbar untuk Kontainer Step */
+        .custom-scroll {
+        /* Standar Firefox */
+        scrollbar-width: thin;
+        scrollbar-color: rgba(217, 119, 6, 0.4) transparent;
+        }
+
+        /* Standar WebKit (Chrome, Safari, Edge) */
+        .custom-scroll::-webkit-scrollbar {
+          width: 5px; /* Ukuran slim agar tidak memakan ruang */
+        }
+
+        .custom-scroll::-webkit-scrollbar-track {
+        background: transparent;
+        border-radius: 9999px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+        background-color: rgba(217, 119, 6, 0.35); /* Warna Amber semitransparan */
+        border-radius: 9999px;
+        transition: background-color 0.2s ease;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+          background-color: rgba(217, 119, 6, 0.7); /* Warna Amber lebih pekat saat hover */
+        }
+
+        @keyframes strokeCircle {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes strokeCheck {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
     </style>
 </head>
 <body class="h-full w-full overflow-hidden text-stone-800 antialiased selection:bg-blue-500 selection:text-white">
 
-    <!-- SKELETON LOADER (Tampil saat data/halaman awal dimuat) -->
+    <!-- SKELETON LOADER -->
     <div id="skeletonLoader" class="fixed inset-0 z-50 flex flex-col justify-between p-4 md:p-8 bg-amber-50/90 backdrop-blur-md">
-        <!-- Header Skeleton -->
         <div class="w-full max-w-lg mx-auto space-y-3">
             <div class="flex items-center gap-3">
                 <div class="w-12 h-12 bg-amber-200/60 rounded-full animate-pulse"></div>
@@ -125,32 +150,27 @@
             <div class="h-2 w-full bg-amber-200/60 rounded-full animate-pulse mt-4"></div>
         </div>
 
-        <!-- Body Skeleton -->
         <div class="w-full max-w-lg mx-auto flex-1 my-6 space-y-4 flex flex-col justify-center">
             <div class="h-24 w-full bg-white/60 rounded-2xl animate-pulse border border-amber-900/10"></div>
             <div class="h-20 w-full bg-white/60 rounded-2xl animate-pulse border border-amber-900/10"></div>
             <div class="h-20 w-full bg-white/60 rounded-2xl animate-pulse border border-amber-900/10"></div>
         </div>
 
-        <!-- Footer Navigation Skeleton -->
         <div class="w-full max-w-lg mx-auto h-14 bg-white/80 rounded-2xl animate-pulse border border-amber-900/10"></div>
     </div>
 
-    <!-- MAIN APP CONTAINER (Fixed Screen Layout) -->
+    <!-- MAIN APP CONTAINER -->
     <div id="appContent" class="hidden h-dvh w-full max-w-lg mx-auto flex flex-col justify-between p-4 sm:p-6 relative">
 
         <!-- HEADER / NAVBAR -->
         <header class="w-full pt-2">
             <div class="flex items-center justify-between mb-3">
-                <!-- Wrapper Logo & Judul Page + Subtitle Bymeproject -->
                 <div class="flex items-center gap-3">
-                    <!-- Bingkai Logo -->
                     <div class="w-12 h-12 rounded-full border-2 border-amber-800/30 bg-amber-50/50 flex items-center justify-center shadow-sm overflow-hidden shrink-0 relative">
                         <img src="image/LogoByme.jpg" 
-                             alt="Logo BymeProject" 
-                             class="w-full h-full object-cover" 
-                             onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
-                        <!-- Fallback jika gambar error/tidak ditemukan -->
+                            alt="Logo BymeProject" 
+                            class="w-full h-full object-cover" 
+                            onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');">
                         <i class="fa-solid fa-gift text-blue-600 text-lg hidden"></i>
                     </div>
 
@@ -164,159 +184,212 @@
                     </div>
                 </div>
 
-                <!-- Indicator Step -->
                 <span id="stepIndicator" class="text-xs text-amber-900/60 font-medium self-start mt-1">Langkah 1 dari 4</span>
             </div>
             
-            <!-- Progress Bar -->
             <div class="w-full bg-amber-200/40 h-1.5 rounded-full mt-2 overflow-hidden p-0.5 border border-amber-900/10">
                 <div id="progressBar" class="bg-blue-600 h-full rounded-full transition-all duration-500 ease-out w-1/4"></div>
             </div>
         </header>
 
-        <!-- DYNAMIC FORM STEPS CONTAINER -->
-        <main class="flex-1 my-4 relative overflow-hidden flex flex-col justify-center">
-            <form id="bookingForm" onsubmit="return false;" class="w-full">
+<!-- DYNAMIC FORM STEPS CONTAINER -->
+<main class="flex-1 my-2 sm:my-4 relative flex flex-col justify-start sm:justify-center min-h-0">
+    <form id="bookingForm" onsubmit="return false;" class="w-full">
 
-                <!-- STEP 1: Note Cara Pemesanan -->
-                <div id="step1" class="step-panel transition-all duration-300 transform translate-x-0 opacity-100">
-                    <div class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4 shadow-xl">
-                        <!-- <div class="flex items-center gap-3 text-blue-600">
-                            <i class="fa-solid fa-circle-info text-2xl"></i>
-                            <h2 class="text-lg font-semibold text-amber-950">Catatan Pemesanan</h2>
-                        </div> -->
-                        <div class="space-y-3 text-sm text-stone-700 leading-relaxed custom-scroll max-h-[55dvh] overflow-y-auto pr-1">
-                            <p class="bg-amber-100/50 p-3 rounded-xl border border-amber-200/60 text-amber-950">
-                                📌 -
-                            </p>
-                            <p class="bg-white/60 p-3 rounded-xl border border-amber-900/10">
-                                🚚 -
-                            </p>
-                            <p class="bg-white/60 p-3 rounded-xl border border-amber-900/10">
-                                🛠️ -
-                            </p>
-                            <p class="bg-white/60 p-3 rounded-xl border border-amber-900/10">
-                                📦 -
-                            </p>
+        <!-- STEP 1: Gambar Cara Pemesanan & Ketentuan -->
+        <div id="step1" class="step-panel transition-all duration-300 transform translate-x-0 opacity-100">
+            <div class="glass-panel p-4 sm:p-6 rounded-3xl space-y-3 shadow-xl max-h-[62vh] sm:max-h-[68vh] overflow-y-auto custom-scroll pr-2">
+                <div class="relative w-full h-[40vh] min-h-[250px] sm:h-[50vh] max-h-[400px] overflow-hidden rounded-2xl border border-amber-900/10 bg-amber-50/50 shadow-inner group">
+                    <img 
+                        src="image/Cover.jpeg" 
+                        alt="Ketentuan dan Cara Pemesanan Byme.Project" 
+                        class="w-full h-full object-cover object-center block rounded-2xl transition-transform duration-300 group-hover:scale-105"
+                        loading="lazy"
+                        onerror="this.onerror=null; this.src='https://via.placeholder.com/600x800?text=Gambar+Gagal+Dimuat';"
+                    />
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 2: Identitas & Tanggal Acara -->
+        <div id="step2" class="step-panel hidden transition-all duration-300 transform translate-x-12 opacity-0">
+            <div class="glass-panel p-4 sm:p-6 rounded-3xl space-y-4 shadow-xl max-h-[62vh] sm:max-h-[68vh] overflow-y-auto custom-scroll pr-2 pb-6">
+                <h2 class="text-base sm:text-lg font-semibold text-blue-600 flex items-center gap-2">
+                    <i class="fa-solid fa-user-pen"></i> Informasi Pemesan
+                </h2>
+
+                <!-- Nama Lengkap -->
+                <div class="space-y-1.5">
+                    <label for="namaLengkap" class="text-xs font-medium text-stone-700 block">Nama Lengkap <span class="text-rose-500">*</span></label>
+                    <div class="relative flex items-center">
+                        <i class="fa-solid fa-user absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm pointer-events-none"></i>
+                        <input type="text" id="namaLengkap" name="namaLengkap" placeholder="Masukkan nama lengkap Anda" required autocomplete="name"
+                            class="w-full bg-white/90 border border-amber-900/15 rounded-xl py-2.5 pl-10 pr-4 text-xs sm:text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+                    </div>
+                </div>
+
+                <!-- Media Sosial -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-medium text-stone-700 block">Media Sosial <span class="text-rose-500">*</span></label>
+                    <div class="flex gap-2">
+                        <div class="relative w-1/3 flex items-center">
+                            <select id="sosmedPlatform" class="w-full bg-white/90 border border-amber-900/15 rounded-xl py-2.5 px-2.5 text-xs text-stone-800 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition appearance-none">
+                                <option value="Tidak Ada">Tidak Ada</option>
+                                <option value="WhatsApp">WhatsApp</option>
+                                <option value="Instagram">Instagram</option>
+                                <option value="TikTok">TikTok</option>
+                                <option value="X">X</option>
+                                <option value="Facebook">Facebook</option>
+                            </select>
+                            <i class="fa-solid fa-chevron-down absolute right-2.5 top-1/2 -translate-y-1/2 text-stone-400 text-[10px] pointer-events-none"></i>
+                        </div>
+                    
+                        <div class="relative flex-1 flex items-center">
+                            <i class="fa-solid fa-at absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm pointer-events-none"></i>
+                            <input type="text" id="sosmedAccount" placeholder="Username | No. Hp | -" required
+                                class="w-full bg-white/90 border border-amber-900/15 rounded-xl py-2.5 pl-10 pr-4 text-xs sm:text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
                         </div>
                     </div>
                 </div>
 
-                <!-- STEP 2: Identitas & Tanggal Acara -->
-                <div id="step2" class="step-panel hidden transition-all duration-300 transform translate-x-12 opacity-0">
-                    <div class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4 shadow-xl">
-                        <h2 class="text-lg font-semibold text-blue-600 flex items-center gap-2">
-                            <i class="fa-solid fa-user-pen"></i> Informasi Pemesan
-                        </h2>
-
-                        <!-- Nama Lengkap -->
-                        <div class="space-y-1.5">
-                            <label for="namaLengkap" class="text-xs font-medium text-stone-700">Nama Lengkap <span class="text-rose-500">*</span></label>
-                            <div class="relative">
-                                <i class="fa-solid fa-user absolute left-3.5 top-3.5 text-stone-400 text-sm"></i>
-                                <input type="text" id="namaLengkap" name="namaLengkap" placeholder="Masukkan nama lengkap Anda" required autocomplete="name"
-                                    class="w-full bg-white/90 border border-amber-900/15 rounded-xl py-2.5 pl-10 pr-4 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
-                            </div>
+                <!-- Grid 3 Kolom Tanggal -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <!-- 1. Tanggal Acara -->
+                    <div class="space-y-1.5">
+                        <label for="tanggalAcara" class="text-xs font-medium text-stone-700 block">Tanggal Acara <span class="text-rose-500">*</span></label>
+                        <div class="relative flex items-center">
+                            <i class="fa-solid fa-calendar-day absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm pointer-events-none"></i>
+                            <input type="date" id="tanggalAcara" name="tanggalAcara" required
+                                class="w-full bg-white/90 border border-amber-900/15 rounded-xl py-2.5 pl-10 pr-3 text-xs sm:text-sm text-stone-800 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
                         </div>
-
-                        <!-- Media Sosial -->
-                        <div class="space-y-1.5">
-                            <label class="text-xs font-medium text-stone-700">Media Sosial <span class="text-rose-500">*</span></label>
-                            <div class="flex gap-2">
-                                <!-- Dropdown Platform -->
-                                <select id="sosmedPlatform" class="w-1/3 bg-white/90 border border-amber-900/15 rounded-xl py-2.5 px-2.5 text-xs text-stone-800 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
-                                    <option value="Tidak Ada">Tidak Ada</option>
-                                    <option value="WhatsApp">WhatsApp</option>
-                                    <option value="Instagram">Instagram</option>
-                                    <option value="TikTok">TikTok</option>
-                                    <option value="X">X</option>
-                                    <option value="Facebook">Facebook</option>
-                                </select>
-                            
-                                <!-- Input Username/Akun -->
-                                <div class="relative flex-1">
-                                    <i class="fa-solid fa-at absolute left-3.5 top-3.5 text-stone-400 text-sm"></i>
-                                    <input type="text" id="sosmedAccount" placeholder="Username | No. Hp | -" required
-                                        class="w-full bg-white/90 border border-amber-900/15 rounded-xl py-2.5 pl-10 pr-4 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
-                                </div>
-                            </div>
+                    </div>
+                
+                    <!-- 2. Tanggal Pengambilan -->
+                    <div class="space-y-1.5">
+                        <label for="tanggalPengambilan" class="text-xs font-medium text-stone-700 block">Tanggal Pengambilan</label>
+                        <div class="relative flex items-center">
+                            <i class="fa-solid fa-box-archive absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm pointer-events-none"></i>
+                            <input type="date" id="tanggalPengambilan" name="tanggalPengambilan" readonly
+                                class="w-full bg-stone-100 border border-amber-900/15 rounded-xl py-2.5 pl-10 pr-3 text-xs sm:text-sm text-stone-600 cursor-not-allowed focus:outline-none transition"
+                                placeholder="Otomatis H-1">
                         </div>
+                    </div>
 
-                        <!-- Tanggal Acara -->
-                        <div class="space-y-1.5">
-                            <label for="tanggalAcara" class="text-xs font-medium text-stone-700">Tanggal Pengambilan <span class="text-rose-500">*</span></label>
-                            <div class="relative">
-                                <i class="fa-solid fa-calendar-day absolute left-3.5 top-3.5 text-stone-400 text-sm"></i>
-                                <input type="date" id="tanggalAcara" name="tanggalAcara" required
-                                    class="w-full bg-white/90 border border-amber-900/15 rounded-xl py-2.5 pl-10 pr-4 text-sm text-stone-800 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
-                            </div>
+                    <!-- 3. Tanggal Pengembalian -->
+                    <div class="space-y-1.5">
+                        <label for="tanggalPengembalian" class="text-xs font-medium text-stone-700 block">Maks. Pengembalian</label>
+                        <div class="relative flex items-center">
+                            <i class="fa-solid fa-rotate-left absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm pointer-events-none"></i>
+                            <input type="date" id="tanggalPengembalian" name="tanggalPengembalian" readonly
+                                class="w-full bg-stone-100 border border-amber-900/15 rounded-xl py-2.5 pl-10 pr-3 text-xs sm:text-sm text-stone-600 cursor-not-allowed focus:outline-none transition"
+                                placeholder="Otomatis H+2">
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
-                <!-- STEP 3: Alamat & Sharelock -->
-                <div id="step3" class="step-panel hidden transition-all duration-300 transform translate-x-12 opacity-0">
-                    <div class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4 shadow-xl">
-                        <h2 class="text-lg font-semibold text-blue-600 flex items-center gap-2">
-                            <i class="fa-solid fa-location-dot"></i> Alamat Pengiriman
-                        </h2>
+        <!-- STEP 3: Alamat & Sharelock -->
+        <div id="step3" class="step-panel hidden transition-all duration-300 transform translate-x-12 opacity-0">
+            <div class="glass-panel p-4 sm:p-6 rounded-3xl space-y-4 shadow-xl max-h-[62vh] sm:max-h-[68vh] overflow-y-auto custom-scroll pr-2 pb-6">
+                <h2 class="text-base sm:text-lg font-semibold text-blue-600 flex items-center gap-2">
+                    <i class="fa-solid fa-location-dot"></i> Lokasi Acara
+                </h2>
 
-                        <!-- Tombol Sharelock -->
-                        <button type="button" id="btnSharelock" class="w-full py-2.5 px-4 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 rounded-xl flex items-center justify-center gap-2 text-emerald-700 text-xs font-semibold transition active:scale-95">
-                            <i class="fa-solid fa-crosshairs text-sm"></i>
-                            <span id="btnSharelockText">Klik Untuk Sharelock Otomatis</span>
+                <button type="button" id="btnSharelock" class="w-full py-2.5 px-4 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 rounded-xl flex items-center justify-center gap-2 text-emerald-700 text-xs font-semibold transition active:scale-95">
+                    <i class="fa-solid fa-crosshairs text-sm"></i>
+                    <span id="btnSharelockText">Klik Untuk Sharelock Otomatis</span>
+                </button>
+
+                <div class="space-y-1.5">
+                    <label for="alamat" class="text-xs font-medium text-stone-700 block">Alamat Lengkap <span class="text-rose-500">*</span></label>
+                    <textarea id="alamat" name="alamat" rows="3" placeholder="Ketik manual alamat Anda (Nama jalan, RT/RW, Kecamatan, Kabupaten)" required
+                        class="w-full bg-white/90 border border-amber-900/15 rounded-xl p-3 text-xs sm:text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition custom-scroll resize-none"></textarea>
+                </div>
+
+                <input type="hidden" id="mapsUrl" name="mapsUrl">
+                <div id="sharelockStatus" class="text-[11px] text-emerald-700 hidden flex items-center gap-1.5 font-medium">
+                    <i class="fa-solid fa-circle-check text-emerald-600"></i>
+                    <span>Koordinat GPS berhasil ditandai</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 4: Jenis Box & Nuansa Bunga -->
+        <div id="step4" class="step-panel hidden transition-all duration-300 transform translate-x-12 opacity-0">
+            <div class="glass-panel p-4 sm:p-6 rounded-3xl space-y-3.5 shadow-xl max-h-[62vh] sm:max-h-[68vh] overflow-y-auto custom-scroll pr-2 pb-6">
+                <h2 class="text-base sm:text-lg font-semibold text-blue-600 flex items-center gap-2">
+                    <i class="fa-solid fa-boxes-packing"></i> Detail Dekorasi
+                </h2>
+
+                <!-- 1. Pilihan Jenis Box -->
+                <div class="space-y-1.5">
+                    <label for="jenisBox" class="text-xs font-medium text-stone-700 block">Jenis Box Seserahan <span class="text-rose-500">*</span></label>
+                    <div class="relative flex items-center">
+                        <i class="fa-solid fa-box absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm pointer-events-none"></i>
+                        <select id="jenisBox" name="jenisBox" required
+                            class="w-full bg-white/90 border border-amber-900/15 rounded-xl py-2.5 pl-10 pr-8 text-xs sm:text-sm text-stone-800 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition appearance-none">
+                            <option value="" disabled selected>-- Pilih Jenis Box --</option>
+                            <option value="Box Ukir Putih" data-img="image/BoxUkirPutih.jpeg">Box Ukir Putih</option>
+                            <option value="Box Ukir Gold" data-img="image/BoxUkirGold.jpeg">Box Ukir Gold</option>
+                            <option value="Box Kayu Minimalis" data-img="image/BoxKayuMinimalis.jpeg">Box Kayu Minimalis</option>
+                            <option value="Box Terarium" data-img="image/BoxTerarium.jpeg">Box Terarium</option>
+                            <option value="Box Luxury Pearl" data-img="image/BoxLuxuryPearl.jpeg">Box Luxury Pearl</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-xs pointer-events-none"></i>
+                    </div>
+                </div>
+            
+                <!-- Preview Gambar Contoh Box -->
+                <div id="boxPreviewContainer" class="hidden transition-all duration-300 pt-0.5">
+                    <span class="text-[11px] font-medium text-stone-500 block mb-1">Contoh Tampilan Box:</span>
+                    <div class="relative w-fit max-w-[75%] mx-auto h-24 sm:h-28 overflow-hidden rounded-xl border border-amber-900/15 bg-stone-100 shadow-sm flex items-center justify-center p-1">
+                        <img id="boxPreviewImg" src="" alt="Contoh Box" class="h-full w-auto object-contain rounded-lg">
+                    </div>
+                </div>
+
+                <!-- 2. Nuansa Utama Bunga -->
+                <div class="space-y-1.5 pt-0.5">
+                    <label for="nuansaBunga" class="text-xs font-medium text-stone-700 block">Nuansa Utama Bunga <span class="text-rose-500">*</span></label>
+                    <div class="relative flex items-center">
+                        <i class="fa-solid fa-spa absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400 text-sm pointer-events-none"></i>
+                        <input type="text" id="nuansaBunga" name="nuansaBunga" placeholder="Contoh: Putih Gold, Soft Pink & Sage Green" required
+                            class="w-full bg-white/90 border border-amber-900/15 rounded-xl py-2.5 pl-10 pr-4 text-xs sm:text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 5: List Seserahan -->
+        <div id="step5" class="step-panel hidden transition-all duration-300 transform translate-x-12 opacity-0">
+            <div class="glass-panel p-4 sm:p-6 rounded-3xl space-y-4 shadow-xl max-h-[62vh] sm:max-h-[68vh] overflow-y-auto custom-scroll pr-2 pb-6">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-base sm:text-lg font-semibold text-blue-600 flex items-center gap-2">
+                        <i class="fa-solid fa-gift"></i> List Seserahan
+                    </h2>
+                    <button type="button" id="btnAddItem" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-600 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition active:scale-95">
+                        <i class="fa-solid fa-plus"></i> Tambah
+                    </button>
+                </div>
+
+                <p class="text-xs text-stone-500">Sebutkan detail isi barang seserahan.</p>
+
+                <div id="seserahanContainer" class="space-y-2.5 max-h-[200px] overflow-y-auto pr-1 custom-scroll">
+                    <div class="flex items-center gap-2 seserahan-item">
+                        <input type="text" placeholder="Item 1"
+                            class="item-input flex-1 bg-blue-50 border border-slate-700/60 rounded-xl py-2 px-3 text-xs sm:text-sm text-black placeholder-slate-500 focus:outline-none focus:bg-blue-50 transition">
+                        <button type="button" class="btn-remove-item text-rose-500 p-2 transition opacity-40 cursor-not-allowed" disabled aria-label="Hapus item">
+                            <i class="fa-solid fa-trash-can"></i>
                         </button>
-
-                        <!-- Input Alamat Manual -->
-                        <div class="space-y-1.5">
-                            <label for="alamat" class="text-xs font-medium text-stone-700">Alamat Lengkap <span class="text-rose-500">*</span></label>
-                            <textarea id="alamat" name="alamat" rows="4" placeholder="Ketik manual alamat Anda (Nama jalan, RT/RW, Kecamatan, Kabupaten)" required
-                                class="w-full bg-white/90 border border-amber-900/15 rounded-xl p-3 text-sm text-stone-800 placeholder-stone-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition custom-scroll resize-none"></textarea>
-                        </div>
-
-                        <!-- Status Sharelock/Maps Link -->
-                        <input type="hidden" id="mapsUrl" name="mapsUrl">
-                        <div id="sharelockStatus" class="text-[11px] text-emerald-700 hidden flex items-center gap-1.5 font-medium">
-                            <i class="fa-solid fa-circle-check text-emerald-600"></i>
-                            <span>Koordinat GPS berhasil ditandai</span>
-                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </form>
+</main>
 
-                <!-- STEP 4: List Seserahan -->
-                <div id="step4" class="step-panel hidden transition-all duration-300 transform translate-x-12 opacity-0">
-                    <div class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4 shadow-xl">
-                        <div class="flex items-center justify-between">
-                            <h2 class="text-lg font-semibold text-blue-600 flex items-center gap-2">
-                                <i class="fa-solid fa-gift"></i> List Seserahan
-                            </h2>
-                            <button type="button" id="btnAddItem" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-blue-600 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition active:scale-95">
-                                <i class="fa-solid fa-plus"></i> Tambah
-                            </button>
-                        </div>
-
-                        <p class="text-xs text-stone-500">Sebutkan detail isi barang seserahan.</p>
-
-                        <!-- Container List Barang -->
-                        <div id="seserahanContainer" class="space-y-2.5 max-h-[220px] overflow-y-auto pr-1 custom-scroll">
-                            <!-- Item default 1 -->
-                            <div class="flex items-center gap-2 seserahan-item">
-                                <input type="text" placeholder="Item 1"
-                                    class="item-input flex-1 bg-blue-50 border border-slate-700/60 rounded-xl py-2 px-3 text-sm text-black placeholder-slate-500 focus:outline-none focus:bg-blue-50 transition">
-                                <button type="button" class="btn-remove-item text-rose-500 p-2 transition opacity-40 cursor-not-allowed" disabled aria-label="Hapus item">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </form>
-        </main>
-
-        <!-- FOOTER CONTAINER (Navigasi + Branding) -->
+        <!-- FOOTER CONTAINER -->
         <footer class="w-full pb-2 pt-2 border-t border-amber-900/10 flex flex-col gap-3">
-            <!-- Navigasi Tombol -->
             <div class="flex items-center justify-between gap-3 w-full">
                 <button type="button" id="btnPrev" class="hidden flex-1 py-3 px-4 bg-white/80 hover:bg-white border border-amber-900/15 text-stone-700 rounded-2xl text-xs sm:text-sm font-semibold shadow-sm transition active:scale-95 flex items-center justify-center gap-2">
                     <i class="fa-solid fa-arrow-left"></i> Kembali
@@ -326,7 +399,6 @@
                 </button>
             </div>
 
-            <!-- Copyright / Branding Footer -->
             <div class="text-center text-[11px] text-amber-900/60 font-semibold tracking-wider uppercase">
                 Byme.Project
             </div>
@@ -335,27 +407,25 @@
     </div>
 
     <!-- POP-UP MODAL SUKSES -->
-<div id="successModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-stone-900/40 backdrop-blur-md">
-    <div class="glass-panel max-w-sm w-full p-6 sm:p-8 rounded-3xl text-center space-y-4 border border-amber-900/10 shadow-2xl transform transition-all scale-95 opacity-0" id="modalCard">
-        
-        <!-- Animated SVG Checkmark -->
-        <div class="w-20 h-20 mx-auto flex items-center justify-center">
-            <svg class="w-20 h-20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                <circle class="checkmark-circle" cx="26" cy="26" r="23"/>
-                <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-            </svg>
+    <div id="successModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-stone-900/40 backdrop-blur-md">
+        <div class="glass-panel max-w-sm w-full p-6 sm:p-8 rounded-3xl text-center space-y-4 border border-amber-900/10 shadow-2xl transform transition-all scale-95 opacity-0" id="modalCard">
+            <div class="w-20 h-20 mx-auto flex items-center justify-center">
+                <svg class="w-20 h-20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark-circle" cx="26" cy="26" r="23"/>
+                    <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+            </div>
+
+            <h3 class="text-xl font-bold text-amber-950">Pesanan Berhasil Dibuat!</h3>
+            <p class="text-xs text-stone-600 leading-relaxed">
+                Terima kasih telah memesan di <span class="text-blue-600 font-semibold">Byme.Project</span>. Data pesanan Anda telah tersimpan.
+            </p>
+
+            <button type="button" onclick="location.reload()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-xs font-semibold shadow-md shadow-blue-500/20 transition active:scale-95">
+                Selesai & Buat Pesanan Baru
+            </button>
         </div>
-
-        <h3 class="text-xl font-bold text-amber-950">Pesanan Berhasil Dibuat!</h3>
-        <p class="text-xs text-stone-600 leading-relaxed">
-            Terima kasih telah memesan di <span class="text-blue-600 font-semibold">Byme.Project</span>. Data pesanan Anda telah tersimpan.
-        </p>
-
-        <button type="button" onclick="location.reload()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-xs font-semibold shadow-md shadow-blue-500/20 transition active:scale-95">
-            Selesai & Buat Pesanan Baru
-        </button>
     </div>
-</div>
 
     <!-- EXTERNAL JS FILE -->
     <script src="script.js"></script>

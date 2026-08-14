@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // 2. STATE & DOM ELEMENTS
   // -----------------------------------------------------------
   let currentStep = 1;
-  const totalSteps = 4;
+  const totalSteps = 5; // Diperbarui dari 4 menjadi 5
 
   const skeletonLoader = document.getElementById("skeletonLoader");
   const appContent = document.getElementById("appContent");
@@ -39,6 +39,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const mapsUrlInput = document.getElementById("mapsUrl");
   const sharelockStatus = document.getElementById("sharelockStatus");
   const alamatInput = document.getElementById("alamat");
+
+  // DOM Elements untuk Step 4 (Jenis Box & Nuansa Bunga)
+  const jenisBoxSelect = document.getElementById("jenisBox");
+  const boxPreviewContainer = document.getElementById("boxPreviewContainer");
+  const boxPreviewImg = document.getElementById("boxPreviewImg");
+  const nuansaBungaInput = document.getElementById("nuansaBunga");
 
   const btnAddItem = document.getElementById("btnAddItem");
   const seserahanContainer = document.getElementById("seserahanContainer");
@@ -149,6 +155,14 @@ document.addEventListener("DOMContentLoaded", function () {
         showToast("Mohon isi alamat lengkap Anda.");
         return false;
       }
+    } else if (currentStep === 4) {
+      const jenisBox = jenisBoxSelect ? jenisBoxSelect.value : "";
+      const nuansaBunga = nuansaBungaInput ? nuansaBungaInput.value.trim() : "";
+
+      if (!jenisBox || !nuansaBunga) {
+        showToast("Mohon pilih jenis box dan tentukan nuansa bunga.");
+        return false;
+      }
     }
     return true;
   }
@@ -226,6 +240,23 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // -----------------------------------------------------------
+  // 6.1 DYNAMIC BOX PREVIEW LISTENER (Step 4)
+  // -----------------------------------------------------------
+  if (jenisBoxSelect) {
+    jenisBoxSelect.addEventListener("change", function () {
+      const selectedOption = this.options[this.selectedIndex];
+      const imgPath = selectedOption.getAttribute("data-img");
+
+      if (imgPath && boxPreviewImg && boxPreviewContainer) {
+        boxPreviewImg.src = imgPath;
+        boxPreviewContainer.classList.remove("hidden");
+      } else if (boxPreviewContainer) {
+        boxPreviewContainer.classList.add("hidden");
+      }
+    });
+  }
+
+  // -----------------------------------------------------------
   // 7. DYNAMIC SESERAHAN LIST
   // -----------------------------------------------------------
   if (btnAddItem && seserahanContainer) {
@@ -288,27 +319,37 @@ document.addEventListener("DOMContentLoaded", function () {
   // -----------------------------------------------------------
   // 8. FORM SUBMISSION TO GOOGLE APPS SCRIPT
   // -----------------------------------------------------------
-// CONFIGURATION: Nomor WhatsApp Admin (Gunakan format 62...)
-  const ADMIN_WA_NUMBER = "628159294269"; //
+  // CONFIGURATION: Nomor WhatsApp Admin
+  const ADMIN_WA_NUMBER = "628159294269";
 
   // Helper: Membuat URL WhatsApp dengan Templat Pesan
   function buildWhatsAppUrl(payload) {
-    // Merapikan format daftar seserahan (CSV ke list berpoin)
     const itemsList = payload.seserahanList
       .split(",")
       .map((item, idx) => `   ${idx + 1}. ${item.trim()}`)
       .join("\n");
 
-    // Templat Pesan WhatsApp
     const message = `Halo Byme.Project, saya ingin mengonfirmasi pesanan baru:
 
-  *DATA PEMESAN:*
-  • *Nama Lengkap:* ${payload.namaLengkap}
-  • *Media Sosial:* ${payload.sosmedCSV}
-  • *Tanggal Acara:* ${payload.tanggalAcara}
-  Mohon diproses pesanan saya. Terima kasih!`;
+*DATA PEMESAN:*
+• *Nama Lengkap:* ${payload.namaLengkap}
+• *Media Sosial:* ${payload.sosmedCSV}
+• *Tanggal Acara:* ${payload.tanggalAcara}
+• *Tanggal Pengambilan (H-1):* ${payload.tanggalPengambilan || "-"}
+• *Maks. Pengembalian (H+2):* ${payload.tanggalPengembalian || "-"}
 
-    // Encode teks agar aman untuk URL
+*LOKASI PENGIRIMAN:*
+• *Alamat:* ${payload.alamat}
+${payload.mapsUrl ? `• *Maps:* ${payload.mapsUrl}\n` : ""}
+*DEKORASI & BOX:*
+• *Jenis Box:* ${payload.jenisBox || "-"}
+• *Nuansa Bunga:* ${payload.nuansaBunga || "-"}
+
+*DAFTAR ITEM SESERAHAN:*
+${itemsList}
+
+Mohon diproses pesanan saya. Terima kasih!`;
+
     return `https://wa.me/${ADMIN_WA_NUMBER}?text=${encodeURIComponent(message)}`;
   }
 
@@ -323,14 +364,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     const sosmedValue = getSosmedCSV();
+    const tglPengambilanElem = document.getElementById("tanggalPengambilan");
+    const tglPengembalianElem = document.getElementById("tanggalPengembalian");
 
     const payload = {
       namaLengkap: document.getElementById("namaLengkap").value.trim(),
       sosmedCSV: sosmedValue,
       usernameIg: sosmedValue,
       tanggalAcara: document.getElementById("tanggalAcara").value.trim(),
+      tanggalPengambilan: tglPengambilanElem ? tglPengambilanElem.value.trim() : "",
+      tanggalPengembalian: tglPengembalianElem ? tglPengembalianElem.value.trim() : "",
       alamat: alamatInput ? alamatInput.value.trim() : "",
       mapsUrl: mapsUrlInput ? mapsUrlInput.value.trim() : "",
+      jenisBox: jenisBoxSelect ? jenisBoxSelect.value : "",
+      nuansaBunga: nuansaBungaInput ? nuansaBungaInput.value.trim() : "",
       seserahanList: seserahanCSV,
     };
 
@@ -351,10 +398,7 @@ document.addEventListener("DOMContentLoaded", function () {
         await new Promise((res) => setTimeout(res, 1200));
       }
 
-      // Buat URL WA berdasarkan payload
       const waUrl = buildWhatsAppUrl(payload);
-
-      // Tampilkan Modal Sukses terlebih dahulu
       showSuccessModal(waUrl);
 
     } catch (err) {
@@ -369,41 +413,80 @@ document.addEventListener("DOMContentLoaded", function () {
   function showSuccessModal(waUrl) {
     if (!successModal || !modalCard) return;
 
-    // Trigger Ulang Animasi SVG Circle & Checkmark
     const svgCircle = modalCard.querySelector(".checkmark-circle");
     const svgCheck = modalCard.querySelector(".checkmark-check");
 
     if (svgCircle && svgCheck) {
       svgCircle.style.animation = "none";
       svgCheck.style.animation = "none";
-      void svgCircle.offsetWidth; // Reflow
+      void svgCircle.offsetWidth;
       svgCircle.style.animation = "";
       svgCheck.style.animation = "";
     }
 
-    // Setel Aksi Tombol di Modal untuk Mengarah ke WA
     const btnModal = modalCard.querySelector("button");
     if (btnModal && waUrl) {
       btnModal.innerHTML = `<i class="fa-brands fa-whatsapp text-base mr-1"></i> Konfirmasi ke WhatsApp`;
       btnModal.className = "w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl text-xs font-semibold shadow-md shadow-emerald-500/20 transition active:scale-95 flex items-center justify-center gap-1";
       btnModal.onclick = function () {
         window.open(waUrl, "_blank");
-        location.reload(); // Reset form setelah membuka WA
+        location.reload();
       };
     }
 
-    // Tampilkan Modal
     successModal.classList.remove("hidden");
     setTimeout(() => {
       modalCard.classList.remove("scale-95", "opacity-0");
       modalCard.classList.add("scale-100", "opacity-100");
     }, 50);
 
-    // Opsi Otomatis Buka WA setelah 2 detik (Opsional)
     setTimeout(() => {
       if (waUrl) {
         window.open(waUrl, "_blank");
       }
     }, 2000);
+  }
+
+  // -----------------------------------------------------------
+  // 9. AUTOMATION TANGGAL ACARA (H-1 & H+2)
+  // -----------------------------------------------------------
+  const tanggalAcaraInput = document.getElementById("tanggalAcara");
+  const tanggalPengambilanInput = document.getElementById("tanggalPengambilan");
+  const tanggalPengembalianInput = document.getElementById("tanggalPengembalian");
+
+  function formatDateToYYYYMMDD(dateObj) {
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const day = String(dateObj.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
+  if (tanggalAcaraInput) {
+    tanggalAcaraInput.addEventListener("change", function () {
+      const dateVal = this.value;
+      if (!dateVal) {
+        if (tanggalPengambilanInput) tanggalPengambilanInput.value = "";
+        if (tanggalPengembalianInput) tanggalPengembalianInput.value = "";
+        return;
+      }
+
+      // Parsing aman untuk menghindari bug Timezone Offset
+      const parts = dateVal.split("-");
+      const eventDate = new Date(parts[0], parts[1] - 1, parts[2]);
+
+      // Hitung H-1 (Pengambilan)
+      const pickupDate = new Date(eventDate);
+      pickupDate.setDate(pickupDate.getDate() - 1);
+      if (tanggalPengambilanInput) {
+        tanggalPengambilanInput.value = formatDateToYYYYMMDD(pickupDate);
+      }
+
+      // Hitung H+2 (Maksimal Pengembalian)
+      const returnDate = new Date(eventDate);
+      returnDate.setDate(returnDate.getDate() + 2);
+      if (tanggalPengembalianInput) {
+        tanggalPengembalianInput.value = formatDateToYYYYMMDD(returnDate);
+      }
+    });
   }
 });
