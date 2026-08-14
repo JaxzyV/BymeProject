@@ -300,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .join("\n");
 
     // Templat Pesan WhatsApp
-    const message = `Halo BymeProject, saya ingin mengonfirmasi pesanan baru:
+    const message = `Halo Byme.Project, saya ingin mengonfirmasi pesanan baru:
 
   *DATA PEMESAN:*
   • *Nama Lengkap:* ${payload.namaLengkap}
