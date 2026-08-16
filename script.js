@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // 1. OBFUSCATED APPS SCRIPT URL
   // -----------------------------------------------------------
   const _0x4a21 = [
-    "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J6emF3S0J4Ym5uU3RvTjMwNzlMQ0NucnFQMlhUWElWWEREMWVDdmdCZkFNQlNUWUVkLUw1eXRHdlFpZVo3czVodlZMQS9leGVj",
+    "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J5UEZUNWNGLS0tZ2tZUFQ0b3otSkRaZWxCWEM3eU9Gak1KaW5lVUF4cXk1b1R0bWNvV0k2S096VHNJWUdsMHYybXhVUS9leGVj",
   ];
 
   function getEndpoint() {
@@ -98,6 +98,34 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // -----------------------------------------------------------
+  // HELPER: CALCULATE DATES AUTOMATICALLY
+  // -----------------------------------------------------------
+  function updateCalculatedDates() {
+    const tglAcara = document.getElementById("tanggalAcara");
+    const tglPengambilan = document.getElementById("tanggalPengambilan");
+    const tglPengembalian = document.getElementById("tanggalPengembalian");
+
+    if (tglAcara && tglAcara.value) {
+      const parts = tglAcara.value.split("-");
+      if (parts.length === 3) {
+        const eventDate = new Date(parts[0], parts[1] - 1, parts[2]);
+
+        const pickupDate = new Date(eventDate);
+        pickupDate.setDate(pickupDate.getDate() - 1);
+        if (tglPengambilan) {
+          tglPengambilan.value = formatDateToYYYYMMDD(pickupDate);
+        }
+
+        const returnDate = new Date(eventDate);
+        returnDate.setDate(returnDate.getDate() + 2);
+        if (tglPengembalian) {
+          tglPengembalian.value = formatDateToYYYYMMDD(returnDate);
+        }
+      }
+    }
+  }
+
+  // -----------------------------------------------------------
   // 5. MULTI-STEP NAVIGATION LOGIC
   // -----------------------------------------------------------
   function updateStepUI() {
@@ -149,6 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showToast("Mohon lengkapi Nama, Akun Media Sosial, dan Tanggal Acara.");
         return false;
       }
+      updateCalculatedDates();
     } else if (currentStep === 3) {
       const alamat = alamatInput ? alamatInput.value.trim() : "";
       if (!alamat) {
@@ -357,6 +386,8 @@ Mohon diproses pesanan saya. Terima kasih!`;
   // SUBMIT FORM & REDIRECT WA
   // -----------------------------------------------------------
   async function submitForm() {
+    updateCalculatedDates();
+
     const seserahanCSV = getSeserahanCSV();
     if (!seserahanCSV) {
       showToast("Mohon isi minimal 1 item barang seserahan.");
@@ -462,31 +493,7 @@ Mohon diproses pesanan saya. Terima kasih!`;
   }
 
   if (tanggalAcaraInput) {
-    tanggalAcaraInput.addEventListener("change", function () {
-      const dateVal = this.value;
-      if (!dateVal) {
-        if (tanggalPengambilanInput) tanggalPengambilanInput.value = "";
-        if (tanggalPengembalianInput) tanggalPengembalianInput.value = "";
-        return;
-      }
-
-      // Parsing aman untuk menghindari bug Timezone Offset
-      const parts = dateVal.split("-");
-      const eventDate = new Date(parts[0], parts[1] - 1, parts[2]);
-
-      // Hitung H-1 (Pengambilan)
-      const pickupDate = new Date(eventDate);
-      pickupDate.setDate(pickupDate.getDate() - 1);
-      if (tanggalPengambilanInput) {
-        tanggalPengambilanInput.value = formatDateToYYYYMMDD(pickupDate);
-      }
-
-      // Hitung H+2 (Maksimal Pengembalian)
-      const returnDate = new Date(eventDate);
-      returnDate.setDate(returnDate.getDate() + 2);
-      if (tanggalPengembalianInput) {
-        tanggalPengembalianInput.value = formatDateToYYYYMMDD(returnDate);
-      }
-    });
+    tanggalAcaraInput.addEventListener("input", updateCalculatedDates);
+    tanggalAcaraInput.addEventListener("change", updateCalculatedDates);
   }
 });
