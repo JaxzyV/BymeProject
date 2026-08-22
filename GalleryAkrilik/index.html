@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="../icon/IconeByme.png">
+  <title>Byme.Project - Akrilik Gallery</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap');
+    
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #FDF6EB;
+      color: #3D1C06;
+    }
+    .font-serif-custom {
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* Animasi Entrance JS Murni */
+    .fade-element {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .fade-element.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+  <header class="w-full py-5 px-6 border-b border-stone-200/50 fade-element">
+    <div class="max-w-5xl mx-auto flex items-center justify-start gap-4">
+      <div class="w-14 h-14 rounded-full border-2 border-[#ffffff] flex items-center justify-center bg-white overflow-hidden shadow-sm flex-shrink-0">
+        <img src="../icon/IconeByme.png" alt="Byme.Project Logo" class="w-full h-full object-cover" onerror="this.remove(); this.parentElement.innerHTML='<span class=\'font-bold text-lg\'>BP</span>'">
+      </div>
+      
+      <div class="flex flex-col text-left">
+        <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-[#3D1C06] leading-tight">Byme.Project</h1>
+        <p class="text-xs md:text-sm font-semibold tracking-wider text-[#5A3214] uppercase mt-0.5">
+          BUKET | SESERAHAN | MAHAR | LASER MAHAR
+        </p>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-8 flex-grow w-full">
+    
+    <h2 class="text-2xl md:text-3xl font-serif-custom text-center mb-8 text-[#3D1C06] fade-element">
+      Akrilik Gallery
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center justify-items-center">
+      
+      <div class="flex flex-col items-center w-full max-w-md fade-element">
+        <div class="overflow-hidden rounded-2xl shadow-md w-full">
+          <img src="asset/MEDALI AKRILIK_.jpg" alt="Medali Custom" class="w-full h-auto object-cover">
+        </div>
+        <span class="mt-3 text-lg md:text-xl font-medium text-[#3D1C06]">Akrilik Medali</span>
+      </div>
+      <div class="flex flex-col items-center w-full max-w-md fade-element">
+        <div class="overflow-hidden rounded-2xl shadow-md w-full">
+          <img src="asset/LABEL NAMA KAYU.png" alt="Akrilik Custom" class="w-full h-auto object-cover">
+        </div>
+        <span class="mt-3 text-lg md:text-xl font-medium text-[#3D1C06]">Akrilik Label Nama Kayu</span>
+      </div>
+
+      <div class="flex flex-col items-center w-full max-w-md fade-element">
+        <div class="overflow-hidden rounded-2xl shadow-md w-full">
+          <img src="asset/LABEL NAMA AKRILIK.png" alt="Figura Custom" class="w-full h-auto object-cover">
+        </div>
+        <span class="mt-3 text-lg md:text-xl font-medium text-[#3D1C06]">Akrilik Label Nama</span>
+      </div>
+
+      <div class="flex flex-col items-center w-full max-w-md fade-element">
+        <div class="overflow-hidden rounded-2xl shadow-md w-full">
+          <img src="asset/FIGURA AKRILIK_.png" alt="Akrilik Mahar" class="w-full h-auto object-cover">
+        </div>
+        <span class="mt-3 text-lg md:text-xl font-medium text-[#3D1C06]">Akrilik Figura</span>
+      </div>
+      <div class="flex flex-col items-center w-full max-w-md fade-element">
+        <div class="overflow-hidden rounded-2xl shadow-md w-full">
+          <img src="asset/AKRILIK UKIR.png" alt="Medali Custom" class="w-full h-auto object-cover">
+        </div>
+        <span class="mt-3 text-lg md:text-xl font-medium text-[#3D1C06]">Akrilik Ukir</span>
+      </div>
+      <div class="flex flex-col items-center w-full max-w-md fade-element">
+        <div class="overflow-hidden rounded-2xl shadow-md w-full">
+          <img src="asset/AKRILIK TETES.png" alt="Medali Custom" class="w-full h-auto object-cover">
+        </div>
+        <span class="mt-3 text-lg md:text-xl font-medium text-[#3D1C06]">Akrilik Tetes</span>
+      </div>
+      <div class="flex flex-col items-center w-full max-w-md fade-element">
+        <div class="overflow-hidden rounded-2xl shadow-md w-full">
+          <img src="asset/AKRILIK KERTAS.png" alt="Medali Custom" class="w-full h-auto object-cover">
+        </div>
+        <span class="mt-3 text-lg md:text-xl font-medium text-[#3D1C06]">Akrilik Kertas</span>
+      </div>
+      <div class="flex flex-col items-center w-full max-w-md fade-element">
+        <div class="overflow-hidden rounded-2xl shadow-md w-full">
+          <img src="asset/AKRILIK DOME.png" alt="Medali Custom" class="w-full h-auto object-cover">
+        </div>
+        <span class="mt-3 text-lg md:text-xl font-medium text-[#3D1C06]">Akrilik Dome</span>
+      </div>
+
+    </div>
+
+    <div class="mt-10 flex justify-end w-full fade-element">
+      <a href="https://wa.me/628159294269?text=Halo%20Byme.Project,%20saya%20ingin%20berdiskusi%20lebih%20lanjut%20mengenai%20pemesanan%20akrilik." target="_blank" rel="noopener noreferrer" 
+         class="bg-[#25D366] text-white px-5 py-3 rounded-2xl rounded-br-none shadow-md flex items-center gap-3">
+        <i class="fa-brands fa-whatsapp text-2xl md:text-3xl"></i>
+        <span class="text-sm md:text-base font-semibold">Klik untuk diskusi lebih lanjut..</span>
+      </a>
+    </div>
+
+  </main>
+
+  <footer class="w-full bg-[#E2D5C3] py-6 text-center mt-8">
+    <div class="flex flex-col items-center gap-1">
+      <h3 class="text-xl font-bold text-[#3D1C06]">Byme.Project</h3>
+      <a href="https://instagram.com/rapv.rmdhni" target="_blank" class="text-xs text-blue-700 hover:underline font-semibold tracking-wide">
+        Create by : rapv.rmdhni
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const elements = document.querySelectorAll(".fade-element");
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+          if (entry.isIntersecting) {
+            // Efek stagger (kemunculan berurutan secara mulus)
+            setTimeout(() => {
+              entry.target.classList.add("show");
+            }, index * 100);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      elements.forEach((el) => observer.observe(el));
+    });
+  </script>
+</body>
+</html>

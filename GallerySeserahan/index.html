@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Byme.Project - Seserahan Gallery</title>
+  <link rel="icon" type="image/png" href="../icon/IconeByme.png">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandBg: '#FDF6ED',
+            brandCard: '#F5ECE1',
+            brandDark: '#3D1E16',
+            brandSub: '#6A3825',
+            brandPrice: '#E87A65',
+            brandFooter: '#DDD3C4',
+            brandLink: '#2563EB',
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            serif: ['Playfair Display', 'serif'],
+          },
+          // DEFINISI KEYFRAMES DAN ANIMASI FIRST-LOAD
+          keyframes: {
+            fadeUp: {
+              '0%': { opacity: '0', transform: 'translateY(24px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            }
+          },
+          animation: {
+            fadeUp: 'fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            fadeIn: 'fadeIn 0.8s ease-out forwards',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-brandBg text-brandDark font-sans min-h-screen flex flex-col justify-between antialiased overflow-x-hidden">
+
+  <!-- NAVBAR (Animasi Fade-Down / Fade-Up halus saat dimuat) -->
+  <header class="w-full py-4 px-4 sm:px-8 border-b border-black/5 flex items-center justify-start gap-4 max-w-5xl mx-auto animate-fadeUp">
+    <!-- Template Logo -->
+    <div class="w-16 h-16 rounded-full bg-white border border-gray-200 flex items-center justify-center overflow-hidden shrink-0 shadow-sm transition-transform duration-300 hover:scale-105">
+      <img src="../icon/IconeByme.png" alt="Logo Byme.Project" id="business-logo" class="w-full h-full object-cover">
+    </div>
+    <div>
+      <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-brandDark">Byme.Project</h1>
+      <p class="text-[10px] sm:text-xs font-semibold text-brandSub tracking-wider uppercase mt-0.5">BUKET | SESERAHAN | MAHAR | LASER MAHAR</p>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="max-w-5xl mx-auto w-full px-4 sm:px-8 py-8 flex-1">
+    <!-- JUDUL HALAMAN -->
+    <h2 class="text-center font-serif text-2xl sm:text-3xl text-brandDark mb-8 animate-fadeUp opacity-0 [animation-delay:150ms]">Seserahan Gallery</h2>
+
+    <!-- CONTAINER PRODUK -->
+    <div id="product-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4 sm:gap-6">
+      
+      <!-- PRODUK 1 (Delay 200ms) -->
+      <div onclick="openModal('Terarium Box', '75.000')" class="bg-brandCard rounded-xl overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer flex flex-col justify-between opacity-0 animate-fadeUp [animation-delay:200ms]">
+        <div class="aspect-square w-full overflow-hidden bg-gray-200">
+          <img src="asset/BOX TERARIUM_.jpg" alt="Terarium Box" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+        </div>
+        <div class="p-3 sm:p-4 text-center">
+          <h3 class="font-bold text-sm sm:text-base text-brandDark">Terarium Box</h3>
+          <p class="text-xs sm:text-sm font-semibold text-brandPrice mt-1">Rp. 75.000/Box</p>
+        </div>
+      </div>
+
+      <!-- PRODUK 2 (Delay 300ms) -->
+      <div onclick="openModal('Kayu Minimalis Box', '65.000')" class="bg-brandCard rounded-xl overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer flex flex-col justify-between opacity-0 animate-fadeUp [animation-delay:300ms]">
+        <div class="aspect-square w-full overflow-hidden bg-gray-200">
+          <img src="asset/BOX KAYU MINIMALIS_.jpg" alt="Kayu Minimalis Box" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+        </div>
+        <div class="p-3 sm:p-4 text-center">
+          <h3 class="font-bold text-sm sm:text-base text-brandDark">Kayu Minimalis Box</h3>
+          <p class="text-xs sm:text-sm font-semibold text-brandPrice mt-1">Rp. 65.000/Box</p>
+        </div>
+      </div>
+
+      <!-- PRODUK 3 (Delay 400ms) -->
+      <div onclick="openModal('Ukir Putih Box', '65.000')" class="bg-brandCard rounded-xl overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer flex flex-col justify-between opacity-0 animate-fadeUp [animation-delay:400ms]">
+        <div class="aspect-square w-full overflow-hidden bg-gray-200">
+          <img src="asset/BOX UKIR PUTIH_.jpg" alt="Ukir Putih Box" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+        </div>
+        <div class="p-3 sm:p-4 text-center">
+          <h3 class="font-bold text-sm sm:text-base text-brandDark">Ukir Putih Box</h3>
+          <p class="text-xs sm:text-sm font-semibold text-brandPrice mt-1">Rp. 65.000/Box</p>
+        </div>
+      </div>
+
+      <!-- PRODUK 4 (Delay 500ms) -->
+      <div onclick="openModal('Ukir Gold Box', '65.000')" class="bg-brandCard rounded-xl overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer flex flex-col justify-between opacity-0 animate-fadeUp [animation-delay:500ms]">
+        <div class="aspect-square w-full overflow-hidden bg-gray-200">
+          <img src="asset/BOX UKIR GOLD.jpg" alt="Ukir Gold Box" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+        </div>
+        <div class="p-3 sm:p-4 text-center">
+          <h3 class="font-bold text-sm sm:text-base text-brandDark">Ukir Gold Box</h3>
+          <p class="text-xs sm:text-sm font-semibold text-brandPrice mt-1">Rp. 65.000/Box</p>
+        </div>
+      </div>
+
+      <!-- PRODUK 5 (Delay 600ms) -->
+      <div onclick="openModal('Luxury Pearl Box', '100.000')" class="bg-brandCard rounded-xl overflow-hidden shadow-sm hover:shadow-md transition cursor-pointer flex flex-col justify-between opacity-0 animate-fadeUp [animation-delay:600ms]">
+        <div class="aspect-square w-full overflow-hidden bg-gray-200">
+          <img src="asset/BOX LUXURY PEARL.jpg" alt="Luxury Pearl Box" class="w-full h-full object-cover hover:scale-105 transition duration-300">
+        </div>
+        <div class="p-3 sm:p-4 text-center">
+          <h3 class="font-bold text-sm sm:text-base text-brandDark">Luxury Pearl Box</h3>
+          <p class="text-xs sm:text-sm font-semibold text-brandPrice mt-1">Rp. 100.000/Box</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER (Delay 700ms) -->
+  <footer class="w-full bg-brandFooter py-6 text-center mt-12 opacity-0 animate-fadeIn [animation-delay:700ms]">
+    <h3 class="text-xl font-bold text-brandDark">Byme.Project</h3>
+    <p class="text-xs mt-1 text-gray-700">
+      <a href="https://instagram.com/rapv.rmdhni" target="_blank" rel="noopener noreferrer" class="text-brandLink font-bold underline hover:opacity-80">Create by : rapv.rmdhni</a>
+    </p>
+  </footer>
+
+  <!-- POP-UP MODAL (BOTTOM SHEET) -->
+  <div id="modal-backdrop" class="fixed inset-0 bg-black/40 z-50 hidden opacity-0 transition-opacity duration-300" onclick="closeModal()"></div>
+  
+  <div id="product-modal" class="fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl p-6 shadow-2xl transform translate-y-full transition-transform duration-300 max-w-md mx-auto">
+    <div class="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-4"></div>
+    <div class="text-center">
+      <h3 id="modal-product-name" class="text-xl font-bold text-brandDark">Nama Produk</h3>
+      <p id="modal-product-price" class="text-brandPrice font-semibold mt-1">Rp. 0/Box</p>
+      
+      <div class="mt-6">
+        <a id="wa-button" href="#" target="_blank" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition">
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+          </svg>
+          Pesan via WhatsApp
+        </a>
+        <button onclick="closeModal()" class="w-full mt-3 text-sm text-gray-500 font-semibold py-2">Batal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT FOR POPUP MODAL -->
+  <script>
+    const whatsappNumber = "628159294269";
+
+    function openModal(name, price) {
+      document.getElementById('modal-product-name').innerText = name;
+      document.getElementById('modal-product-price').innerText = `Rp. ${price}/Box`;
+      
+      const message = encodeURIComponent(`Halo Byme.Project, saya ingin memesan produk: ${name} (Rp. ${price}/Box)`);
+      document.getElementById('wa-button').href = `https://wa.me/${whatsappNumber}?text=${message}`;
+
+      const backdrop = document.getElementById('modal-backdrop');
+      const modal = document.getElementById('product-modal');
+
+      backdrop.classList.remove('hidden');
+      setTimeout(() => {
+        backdrop.classList.add('opacity-100');
+        modal.classList.remove('translate-y-full');
+      }, 10);
+    }
+
+    function closeModal() {
+      const backdrop = document.getElementById('modal-backdrop');
+      const modal = document.getElementById('product-modal');
+
+      backdrop.classList.remove('opacity-100');
+      modal.classList.add('translate-y-full');
+
+      setTimeout(() => {
+        backdrop.classList.add('hidden');
+      }, 300);
+    }
+  </script>
+</body>
+</html>
