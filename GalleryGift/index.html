@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Byme.Project - Gift Gallery</title>
+  <link rel="icon" type="image/png" href="../icon/IconeByme.png">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Playfair Display & Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brandBg: '#FAF2E9',
+            brandCardBg: '#EFE3D3',
+            brandDark: '#33190E',
+            brandPrice: '#E07A5F',
+            brandFooter: '#DDD0C0'
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'serif'],
+            sans: ['Poppins', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Animasi Halaman */
+    .fade-in-content {
+      animation: fadeIn 0.8s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Animasi Bottom Sheet Popup (Terkunci di Viewport Layar) */
+    #product-modal {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      z-index: 99999 !important;
+      transition: visibility 0.3s ease;
+    }
+    #product-modal .modal-overlay {
+      transition: opacity 0.3s ease;
+    }
+    #product-modal .modal-panel {
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    #product-modal.hidden-sheet {
+      visibility: hidden;
+      pointer-events: none;
+    }
+    #product-modal.hidden-sheet .modal-overlay {
+      opacity: 0;
+    }
+    #product-modal.hidden-sheet .modal-panel {
+      transform: translateY(100%);
+    }
+
+    /* Penyesuaian Orientasi Layar (Horizontal vs Vertikal) */
+    @media (orientation: landscape) and (max-height: 500px) {
+      /* Ubah grid produk menjadi berderet horizontal lebih banyak kolom */
+      #product-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      }
+      /* Ubah kontainer modal menjadi layout horizontal */
+      #modal-content-container {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 1rem !important;
+      }
+      #modal-left-col {
+        width: 40% !important;
+      }
+      #modal-right-col {
+        width: 60% !important;
+      }
+      .modal-panel {
+        max-height: 95vh !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-brandBg font-sans text-brandDark min-h-screen flex flex-col">
+
+  <!-- WRAPPER KONTEN -->
+  <div class="fade-in-content flex-grow flex flex-col w-full">
+    
+    <!-- NAVBAR -->
+    <header class="w-full px-4 py-6 max-w-2xl mx-auto flex items-center gap-4">
+      <div class="w-16 h-16 rounded-full border-2 border-brandDark/20 flex items-center justify-center p-1 bg-white shrink-0">
+        <img src="../icon/IconeByme.png" alt="Logo" class="w-full h-full object-contain rounded-full" onerror="this.src='https://via.placeholder.com/100?text=BP'">
+      </div>
+      <div>
+        <h1 class="text-2xl md:text-3xl font-bold tracking-tight leading-none text-brandDark">Byme.Project</h1>
+        <p class="text-[10px] md:text-xs font-bold tracking-wider text-brandDark/90 mt-1 uppercase">BUKET | SESERAHAN | MAHAR | LASER MAHAR</p>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow max-w-2xl mx-auto w-full px-4 pb-8">
+      <div class="text-center my-4">
+        <h2 class="font-serif text-3xl font-semibold tracking-wide text-brandDark">Gift Gallery</h2>
+        <p class="text-brandPrice font-medium text-xs md:text-sm mt-1">Dibuat sesuai Pesanan dan Menyesuaikan Budget</p>
+        <p class="text-brandDark font-bold text-xs uppercase tracking-wide">TIDAK Menerima bunga segar</p>
+      </div>
+
+      <!-- PRODUCT GRID CONTAINER (Otomatis Menyesuaikan Orientasi Horizontal/Vertikal) -->
+      <div id="product-grid" class="grid grid-cols-2 landscape:grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-3 md:gap-4 my-6">
+        <!-- TEMPLATE SKELETON (LOADER) -->
+      </div>
+
+      <!-- PAGINATION -->
+      <div class="flex justify-center items-center gap-1 mt-8" id="pagination">
+        <!-- Di-render dinamis melalui JS -->
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-brandFooter py-6 text-center mt-auto">
+      <h3 class="text-xl font-bold text-brandDark tracking-wide">Byme.Project</h3>
+      <a id="creator-link" href="https://www.instagram.com/rapv.rmdhni" target="_blank" class="text-xs font-semibold text-blue-600 hover:underline mt-1 inline-block">Create by : rapv.rmdhni</a>
+    </footer>
+
+  </div>
+
+  <!-- POPUP BOTTOM SHEET -->
+  <div id="product-modal" class="hidden-sheet">
+    
+    <!-- Latar Belakang Gelap Overlay -->
+    <div onclick="closeModal()" class="modal-overlay fixed inset-0 bg-black/60 backdrop-blur-xs"></div>
+
+    <!-- Panel Modal -->
+    <div class="modal-panel fixed bottom-0 left-0 right-0 mx-auto max-w-lg landscape:max-w-xl w-full bg-white rounded-t-2xl sm:rounded-t-3xl p-5 shadow-2xl z-10 max-h-[85vh] flex flex-col justify-between">
+      
+      <!-- Drag Bar Indikator -->
+      <div class="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-3 shrink-0"></div>
+
+      <!-- Tombol Close -->
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 font-bold text-2xl w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition" aria-label="Tutup">&times;</button>
+      
+      <!-- Isi Konten Modal (Bisa Berubah Vertikal/Horizontal Sesuai Layar) -->
+      <div id="modal-content-container" class="overflow-y-auto pr-1 my-1 flex flex-col">
+        
+        <!-- Bagian Kiri (Mode Landscape) / Bagian Atas (Mode Portrait) -->
+        <div id="modal-left-col">
+          <h3 id="modal-title" class="text-lg font-bold text-brandDark pr-8"></h3>
+          <p id="modal-price" class="text-brandPrice font-semibold text-sm mb-2"></p>
+          
+          <!-- Option Custom -->
+          <div class="my-3 p-3 bg-brandBg/60 rounded-xl border border-brandDark/10">
+            <label class="font-medium text-sm text-brandDark flex items-center gap-2 cursor-pointer select-none">
+              <input type="checkbox" id="custom-toggle" onchange="toggleCustomMode()" class="rounded text-brandPrice focus:ring-brandPrice w-4 h-4 accent-[#E07A5F]">
+              <span>Order Custom Request</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Bagian Kanan (Mode Landscape) / Bagian Bawah (Mode Portrait) -->
+        <div id="modal-right-col" class="flex-grow">
+          <!-- Non-Custom View -->
+          <div id="standard-view" class="text-xs text-gray-600 mb-4">
+            <p id="modal-desc" class="leading-relaxed bg-gray-50 p-3 rounded-lg border border-gray-100"></p>
+          </div>
+
+          <!-- Custom View Input -->
+          <div id="custom-view" class="hidden mb-4">
+            <label class="block text-xs font-medium text-gray-700 mb-1">Catatan Request Custom:</label>
+            <textarea id="custom-notes" rows="3" class="w-full text-xs p-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-brandDark" placeholder="Tuliskan spesifikasi warna, tema, atau bujet custom Anda..."></textarea>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Tombol WhatsApp -->
+      <button onclick="sendToWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium py-3 rounded-xl text-sm transition flex items-center justify-center gap-2 shadow-sm shrink-0 mt-2">
+        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+          <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+        </svg>
+        <span>Order via WhatsApp</span>
+      </button>
+
+    </div>
+  </div>
+  <link rel="stylesheet" href="asset/Whimsical Garden_350K.png">
+
+  <script>
+    // ==========================================
+    // DATA PRODUK (Edit / Tambah Data di Sini)
+    // ==========================================
+    const productsData = [
+      { id: 1, name: "Acrylic Flower Easel", price: "Rp. 150.000", image: "asset/Acrylic Flower Easel.png", desc: "Bloom box cantik dengan balon ucapan kustom. Bebas pilih warna pita dan bunga." },
+      { id: 2, name: "Amethyst Bloom", price: "Rp. 200.000", image: "asset/Amethyst Bloom.png", desc: "Buket bunga tiruan premium tahan lama dengan nuansa warna pastel/soft." },
+      { id: 3, name: "Amour de Chocolate", price: "Rp. 150.000", image: "asset/Amour de Chocolate.png", desc: "Buket elegan bunga Lily artificial dipadu dengan wrapping warna gelap modern." },
+      { id: 4, name: "Azure Bloom", price: "Rp. 100.000", image: "asset/Azure Bloom.png", desc: "Kombinasi meriah berbagai jenis bunga kain premium dengan pita satin eksklusif." },
+      { id: 5, name: "Bloom Box Ballon", price: "Rp. 185.000", image: "asset/Bloom Box Ballon.png", desc: "Buket uang asli / mainan (sesuai request) dirangkai rapi dengan desain terkesan mewah." },
+      { id: 6, name: "Bloomie Mix", price: "Rp. 225.000", image: "asset/Bloomie Mix.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },
+      { id: 7, name: "Blushing Lily", price: "Rp. 290.000", image: "asset/Blushing Lily.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },
+      { id: 8, name: "Botanical Bliss", price: "Rp. 185.000", image: "asset/Botanical Bliss.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },
+      { id: 9, name: "Dreamy Blossom Giant", price: "Rp. 250.000", image: "asset/Dreamy Blossom Giant.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },
+      { id: 10, name: "Earthy Botanic", price: "Rp. 175.000", image: "asset/Earthy Botanic.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },
+      { id: 11, name: "Flowers Money Bouquet", price: "Rp. 175.000", image: "asset/Flowers Money Bouquet.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },
+      { id: 12, name: "Fruity Serenade", price: "Rp. 185.000", image: "asset/Fruity Serenade.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },
+      { id: 13, name: "Glow Rose Gold", price: "Rp. 175.000", image: "asset/Glow Rose Gold.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },
+      { id: 14, name: "Graduation Joy", price: "Rp. 100.000", image: "asset/Graduation Joy.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },
+      { id: 15, name: "Greenish Dew", price: "Rp. 175.000", image: "asset/Greenish Dew.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },
+      { id: 16, name: "Lily Flower", price: "Rp. 100.000", image: "asset/Lily Flower.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },
+      { id: 17, name: "Midnight Bloom", price: "Rp. 175.000", image: "asset/Midnight Bloom.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },
+      { id: 18, name: "Milestone Box", price: "Rp. 150.000", image: "asset/Milestone Box.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },
+      { id: 19, name: "Money Buoquet", price: "Rp. 100.000", image: "asset/Money Buoquet.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },
+      { id: 20, name: "Monochrome Romance", price: "Rp. 265.000", image: "asset/Monochrome Romance.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },
+      { id: 21, name: "Petite Grace", price: "Rp. 50.000", image: "asset/Petite Grace.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },
+      { id: 22, name: "Premium Crimson Giant", price: "Rp. 875.000", image: "asset/Premium Crimson Giant.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },
+      { id: 23, name: "Pure Serenity", price: "Rp. 150.000", image: "asset/Pure Serenity.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },
+      { id: 24, name: "Round Artificial", price: "Rp. 150.000", image: "asset/Round Artificial.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },      
+      { id: 25, name: "Royal Pearl", price: "Rp. 250.000", image: "asset/Royal Pearl.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },          
+      { id: 26, name: "Sapphire Lily", price: "Rp. 85.000", image: "asset/Sapphire Lily.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },          
+      { id: 27, name: "Skyline Whisper", price: "Rp. 75.000", image: "asset/Skyline Whisper.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },          
+      { id: 28, name: "Starlight Butterfly", price: "Rp. 150.000", image: "asset/Starlight Butterfly.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },          
+      { id: 29, name: "Sweetheart Blush", price: "Rp. 100.000", image: "asset/Sweetheart Blush.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },          
+      { id: 30, name: "Vintage Russet", price: "Rp. 125.000", image: "asset/Vintage Russet.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },          
+      { id: 31, name: "Whimsical Garden", price: "Rp. 350.000", image: "asset/Whimsical Garden.png", desc: "Buket nuansa biru malam dipadukan dengan bunga artificial kontras berkelas." },
+    ];
+
+    const ITEMS_PER_PAGE = 6;
+    let currentPage = 1;
+    let selectedProduct = null;
+    const whatsappNumber = "628xxxxxxxxxx"; // Ganti dengan nomor WhatsApp Anda
+
+    function renderProducts(page) {
+      const grid = document.getElementById('product-grid');
+      grid.innerHTML = '';
+
+      const start = (page - 1) * ITEMS_PER_PAGE;
+      const paginatedItems = productsData.slice(start, start + ITEMS_PER_PAGE);
+
+      paginatedItems.forEach(item => {
+        const card = document.createElement('div');
+        card.className = "bg-brandCardBg rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between cursor-pointer transform transition hover:-translate-y-1";
+        card.onclick = () => openModal(item);
+
+        card.innerHTML = `
+          <div class="bg-white p-3 aspect-square flex items-center justify-center relative overflow-hidden">
+            <!-- Skeleton Loader Abu-abu Transparan -->
+            <div class="absolute inset-0 bg-gray-300/60 animate-pulse skeleton-bg"></div>
+            <img src="${item.image}" alt="${item.name}" class="w-full h-full object-contain relative z-10 opacity-0 transition-opacity duration-300" onload="this.classList.remove('opacity-0'); if(this.previousElementSibling) this.previousElementSibling.remove();">
+          </div>
+          <div class="p-3 text-center">
+            <h4 class="font-medium text-sm md:text-base text-brandDark line-clamp-1">${item.name}</h4>
+            <p class="text-brandPrice font-semibold text-xs md:text-sm mt-0.5">${item.price}</p>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      renderPagination();
+    }
+
+    function renderPagination() {
+      const totalPages = Math.ceil(productsData.length / ITEMS_PER_PAGE) || 1;
+      const paginationContainer = document.getElementById('pagination');
+      paginationContainer.innerHTML = '';
+
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.className = `w-8 h-8 flex items-center justify-center border text-sm font-semibold transition ${i === currentPage ? 'bg-white text-blue-600 border-gray-300 shadow-sm' : 'bg-white/50 text-gray-700 border-gray-200 hover:bg-white'}`;
+        btn.innerText = i;
+        btn.onclick = () => { currentPage = i; renderProducts(i); };
+        paginationContainer.appendChild(btn);
+      }
+    }
+
+    function openModal(product) {
+      selectedProduct = product;
+      document.getElementById('modal-title').innerText = product.name;
+      document.getElementById('modal-price').innerText = product.price;
+      document.getElementById('modal-desc').innerText = product.desc;
+      
+      document.getElementById('custom-toggle').checked = false;
+      document.getElementById('custom-notes').value = '';
+      toggleCustomMode();
+
+      // Buka Bottom Sheet
+      const modal = document.getElementById('product-modal');
+      modal.classList.remove('hidden-sheet');
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden'; // Kunci scroll layar utama
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('product-modal');
+      modal.classList.add('hidden-sheet');
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = ''; // Lepas penguncian scroll
+    }
+
+    function toggleCustomMode() {
+      const isCustom = document.getElementById('custom-toggle').checked;
+      const standardView = document.getElementById('standard-view');
+      const customView = document.getElementById('custom-view');
+      const priceElement = document.getElementById('modal-price');
+
+      if (isCustom) {
+        standardView.classList.add('hidden');
+        customView.classList.remove('hidden');
+        priceElement.classList.add('hidden');
+      } else {
+        standardView.classList.remove('hidden');
+        customView.classList.add('hidden');
+        priceElement.classList.remove('hidden');
+      }
+    }
+
+    function sendToWhatsApp() {
+      const isCustom = document.getElementById('custom-toggle').checked;
+      let text = "";
+
+      if (isCustom) {
+        const notes = document.getElementById('custom-notes').value || "-";
+        text = `Halo Byme.Project, saya ingin request *CUSTOM ORDER*:\n\n` +
+               `*Referensi Produk:* ${selectedProduct.name}\n` +
+               `*Catatan Request:* ${notes}`;
+      } else {
+        text = `Halo Byme.Project, saya ingin memesan:\n\n` +
+               `*Produk:* ${selectedProduct.name}\n` +
+               `*Harga:* ${selectedProduct.price}\n\n` +
+               `Mohon info ketersediaan dan langkah selanjutnya. Terima kasih!`;
+      }
+
+      window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`, '_blank');
+    }
+
+    // Inisialisasi awal
+    document.addEventListener("DOMContentLoaded", () => {
+      renderProducts(currentPage);
+    });
+  </script>
+</body>
+</html>
